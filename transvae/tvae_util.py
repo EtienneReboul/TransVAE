@@ -1,3 +1,4 @@
+import imp
 import re
 import math
 import copy
@@ -5,6 +6,7 @@ import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import selfies as sf
 
 from scipy.stats import entropy
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
@@ -94,12 +96,17 @@ class KLAnnealer:
 
 ####### PREPROCESSING HELPERS ##########
 
-def tokenizer(smile):
-    "Tokenizes SMILES string"
-    pattern =  "(\[[^\]]+]|Br?|Cl?|N|O|S|P|F|I|b|c|n|o|s|p|\(|\)|\.|=|#|-|\+|\\\\|\/|_|:|~|@|\?|>|\*|\$|\%[0-9]{2}|[0-9])"
-    regezz = re.compile(pattern)
-    tokens = [token for token in regezz.findall(smile)]
-    assert smile == ''.join(tokens), ("{} could not be joined".format(smile))
+def tokenizer(mol,mol_encoding='selfies'):
+    if mol_encoding=='smiles':
+        "Tokenizes SMILES string"
+        pattern =  "(\[[^\]]+]|Br?|Cl?|N|O|S|P|F|I|b|c|n|o|s|p|\(|\)|\.|=|#|-|\+|\\\\|\/|_|:|~|@|\?|>|\*|\$|\%[0-9]{2}|[0-9])"
+        regezz = re.compile(pattern)
+        tokens = [token for token in regezz.findall(mol)]
+    elif mol_encoding=='selfies':
+        tokens=list(sf.split_selfies(mol))
+    else:
+        raise NameError('expected mol encoding to be smiles or selfies')
+    assert mol == ''.join(tokens), ("{} could not be joined".format(mol))
     return tokens
 
 def build_org_dict(char_dict):

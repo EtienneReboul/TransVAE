@@ -1,11 +1,14 @@
 import os
 import pickle
 import pkg_resources
-
+import sys
 import numpy as np
 import pandas as pd
 
 import torch
+script_dir = os.path.dirname(os.path.realpath(__file__))
+if __name__ == '__main__':
+    sys.path.append(os.path.join(script_dir, '..'))
 
 from transvae.trans_models import TransVAE
 from transvae.rnn_models import RNN, RNNAttn
