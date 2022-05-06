@@ -89,6 +89,7 @@ def sample_parser():
     parser.add_argument('--n_samples_per_batch', default=100, type=int)
     ### Save Parameters
     parser.add_argument('--save_path', default=None, type=str)
+    parser.add_argument('--name', type=str, default='CbAS_vae')  # the query model name
 
     return parser
 

@@ -8,6 +8,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math, copy, time
 from torch.autograd import Variable
+try:
+    from torch.utils.tensorboard import SummaryWriter
+except:
+    from tensorboardX import SummaryWriter
 
 from transvae.tvae_util import *
 from transvae.opt import NoamOpt
@@ -181,6 +185,9 @@ class VAEShell():
             if not already_wrote:
                 log_file.write('epoch,batch_idx,data_type,tot_loss,recon_loss,pred_loss,kld_loss,prop_mse_loss,run_time\n')
             log_file.close()
+        tensorboard_dir=log_fn[:-4]
+        os.makedirs(tensorboard_dir,exist_ok=True)
+        writer = SummaryWriter(tensorboard_dir)
 
         ### Initialize Annealer
         kl_annealer = KLAnnealer(self.params['BETA_INIT'], self.params['BETA'],
